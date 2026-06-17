@@ -1,16 +1,65 @@
-# React + Vite
+# PassMyFiles.com
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+## Overview
 
-Currently, two official plugins are available:
+PassMyFiles.com is a fast and scalable file sharing platform that allows users to instantly upload and share files using a unique tracking number or shareable link. It also supports email notifications to send files or download links directly to recipients.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+The system is designed with a focus on speed, reliability, and security, including virus scanning for all uploaded files before they are made available for download.
 
-## React Compiler
+---
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Core Features
 
-## Expanding the ESLint configuration
+- Instant file upload and sharing
+- Unique tracking number for every file
+- Shareable download links
+- Email notifications for recipients
+- File access tracking and event logging
+- Malware scanning for uploaded files
+- Scalable background processing system
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+---
+
+## How It Works
+
+1. A user uploads a file through the frontend.
+2. The file is stored securely in AWS S3.
+3. An event is published to Kafka and/or a job is pushed to BullMQ.
+4. Worker services process the file asynchronously.
+5. The worker streams the file and scans it using ClamAV.
+6. If the file is clean, it is marked available for sharing.
+7. If infected, it is deleted from S3.
+8. The system generates:
+   - A unique tracking number
+   - A shareable download link
+9. Users can optionally send the file or link via email.
+
+---
+
+## Architecture
+
+```text
+Client
+  ↓
+Nginx (Reverse Proxy)
+  ↓
+Node.js Backend API
+  ↓
+AWS S3 (File Storage)
+  ↓
+  ↓
+Redis (Queue Backend)
+  ↓
+Kafka (Event Streaming)
+  ↓
+BullMQ (Job Queue)
+  ↓
+Worker Services
+   ├── ClamAV Scanner
+   ├── Email Service
+   └── Tracking Logger
+  ↓
+MongoDB (Metadata & Tracking Data)
+  ↓
+Redis (Queue Backend)
+```
