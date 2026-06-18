@@ -1,0 +1,32 @@
+name: "Deploying to Production"
+
+on:
+  push:
+    brances:
+      - main
+jobs:
+  Frontend_Deployment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: "Deploying the frontend"
+        uses: appleboy/ssh-actions@v1.0.3
+
+        with:
+          host: ${{secrets.OVH_HOST}}
+          username: ubuntu
+          key: ${{secrets.OVH_KEY}}
+          script: |
+            source: ~/.nvm/nvm.sh
+            cd Passmyfiles
+            cd pass-my-files
+
+            git reset --hard
+            git pull
+            cd frontend
+            docker stop passmyfile-frontend
+            docker stop passmyfile-frontend
+            docker build -t passmyfile-frontend .
+            docker run -d --name frontend -p 127.0.0.1:4173:4173 --restart unless-stopped frontend

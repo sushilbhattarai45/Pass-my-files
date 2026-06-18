@@ -60,6 +60,4 @@ Worker Services
    └── Tracking Logger
   ↓
 MongoDB (Metadata & Tracking Data)
-  ↓
-Redis (Queue Backend)
 ```
