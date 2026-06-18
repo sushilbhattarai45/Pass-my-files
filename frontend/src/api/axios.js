@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { showToast } from '../utils/toast';
+import axios from "axios";
+import { showToast } from "../utils/toast";
 
-const RATE_LIMIT_MESSAGE = 'Too many requests. Please wait a minute.';
+const RATE_LIMIT_MESSAGE = "Too many requests. Please wait a minute.";
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -25,11 +25,11 @@ api.interceptors.response.use(
   (response) => response,
   async (error) => {
     if (error.response?.status === 429) {
-      showToast(RATE_LIMIT_MESSAGE, 'warning');
+      showToast(RATE_LIMIT_MESSAGE, "warning");
       return Promise.reject(new Error(RATE_LIMIT_MESSAGE));
     }
 
-    let message = error.message || 'Something went wrong';
+    let message = error.message || "Something went wrong";
     const data = error.response?.data;
 
     if (data instanceof Blob) {
@@ -37,7 +37,7 @@ api.interceptors.response.use(
         const json = JSON.parse(await data.text());
         message = json.error || message;
       } catch {
-        message = 'Something went wrong';
+        message = "Something went wrong";
       }
     } else if (data?.error) {
       message = data.error;
