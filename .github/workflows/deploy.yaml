@@ -43,11 +43,10 @@ jobs:
           host: ${{secrets.HOST}}
           username: ubuntu
           key: ${{secrets.KEY}}
-
-        script: |
-          source: ~/.nvm/nvm.sh
-          cd Passmyfiles
-          cd backend
-          docker-compose down
-          docker-compose build --no-cache
-          docker-compose up -d
+          script: |
+            source: ~/.nvm/nvm.sh
+            cd Passmyfiles
+            cd backend
+            docker-compose down
+            docker-compose build --no-cache
+            docker-compose up -d
