@@ -15,18 +15,39 @@ jobs:
         uses: appleboy/ssh-actions@v1.0.3
 
         with:
-          host: ${{secrets.OVH_HOST}}
+          host: ${{secrets.HOST}}
           username: ubuntu
-          key: ${{secrets.OVH_KEY}}
+          key: ${{secrets.KEY}}
           script: |
             source: ~/.nvm/nvm.sh
             cd Passmyfiles
-            cd pass-my-files
-
             git reset --hard
             git pull
             cd frontend
             docker stop passmyfile-frontend
-            docker stop passmyfile-frontend
+            docker rm  passmyfile-frontend
             docker build -t passmyfile-frontend .
-            docker run -d --name frontend -p 127.0.0.1:4173:4173 --restart unless-stopped frontend
+            docker run -d --name frontend -p 4173:4173 --restart unless-stopped passmyfile-frontend
+
+  Server_Deployment:
+    runs-on: ubuntu_latest
+    needs: Frontend_Deployment
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Deploying the server
+        uses: appleboy/ss-actions@v1.0.3
+
+        with:
+          host: ${{secrets.HOST}}
+          username: ubuntu
+          key: ${{secrets.KEY}}
+
+        script: |
+          source: ~/.nvm/nvm.sh
+          cd Passmyfiles
+          cd backend
+          docker-compose down
+          docker-compose build --no-cache
+          docker-compose up -d
