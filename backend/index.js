@@ -29,7 +29,7 @@ app.use("/files", fileRoutes);
 
 async function startServer() {
   try {
-    await connectDb();
+    // await connectDb();
 
     await connectRedis();
     app.listen(6000, async () => {
