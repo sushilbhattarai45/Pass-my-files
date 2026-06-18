@@ -32,7 +32,7 @@ async function startServer() {
     await connectDb();
 
     await connectRedis();
-    app.listen(PORT, async () => {
+    app.listen(6000, async () => {
       console.log(`Server is running on port ${PORT}`);
       const result = await s3.send(new ListBucketsCommand({}));
       startExpiringWorker();
