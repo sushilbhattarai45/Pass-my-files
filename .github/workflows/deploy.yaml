@@ -27,7 +27,7 @@ jobs:
             docker stop passmyfile-frontend
             docker rm  passmyfile-frontend
             docker build -t passmyfile-frontend .
-            docker run -d --name frontend -p 4173:4173 --restart unless-stopped passmyfile-frontend
+            docker run -d --name passmyfile-frontend -p 4173:4173 --restart unless-stopped passmyfile-frontend
 
   Server_Deployment:
     runs-on: ubuntu_latest
