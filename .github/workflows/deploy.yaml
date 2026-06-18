@@ -30,7 +30,7 @@ jobs:
             docker run -d --name passmyfile-frontend -p 4173:4173 --restart unless-stopped passmyfile-frontend
 
   Server_Deployment:
-    runs-on: ubuntu_latest
+    runs-on: ubuntu-latest
     needs: Frontend_Deployment
     steps:
       - name: Checkout
