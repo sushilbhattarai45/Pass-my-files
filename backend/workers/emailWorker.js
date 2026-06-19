@@ -41,11 +41,72 @@ async function sendEmail(email, link, requestID) {
           subject: "Someone has shared a file with you",
           body: "Someone has shared a file with you.",
           html: `
-          <p>Someone has shared a file with you. Click the link to view the file:
-          <a href="${link}">${link}</a>
-          The link is: ${link}
-          </p>
-          `,
+          <div style="
+            font-family: Arial, sans-serif;
+            background-color: #0a0a0f;
+            padding: 24px;
+            border-radius: 12px;
+            color: #ffffff;
+            max-width: 600px;
+            margin: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+          ">
+            <h2 style="
+              margin: 0 0 12px 0;
+              font-size: 20px;
+              color: #ffffff;
+            ">
+              📁 File Shared With You
+            </h2>
+        
+            <p style="
+              font-size: 14px;
+              color: rgba(255,255,255,0.75);
+              line-height: 1.6;
+            ">
+              Someone has shared a file with you using <b>PassMyFiles</b>.
+              Click the button below to view and download the file.
+            </p>
+        
+            <div style="margin: 24px 0;">
+              <a href="${link}" target="_blank" style="
+                display: inline-block;
+                padding: 12px 18px;
+                background: linear-gradient(90deg, #3B82F6, #8B5CF6);
+                color: white;
+                text-decoration: none;
+                border-radius: 8px;
+                font-size: 14px;
+                font-weight: bold;
+              ">
+                Open File
+              </a>
+            </div>
+        
+            <div style="
+              font-size: 12px;
+              color: rgba(255,255,255,0.5);
+              word-break: break-all;
+              margin-top: 10px;
+            ">
+              If the button doesn’t work, copy and paste this link:<br />
+              <a href="${link}" style="color:#3B82F6;">${link}</a>
+            </div>
+        
+            <hr style="
+              border: none;
+              border-top: 1px solid rgba(255,255,255,0.1);
+              margin: 20px 0;
+            "/>
+        
+            <p style="
+              font-size: 11px;
+              color: rgba(255,255,255,0.4);
+            ">
+              This email was sent via PassMyFiles secure file sharing system.
+            </p>
+          </div>
+        `,
           // text: "Someone has shared a file with you. Click the link to view the file.",
           campaign: "File Sharing",
         },
