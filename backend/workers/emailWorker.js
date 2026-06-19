@@ -39,10 +39,14 @@ async function sendEmail(email, link, requestID) {
         {
           to: email,
           subject: "Someone has shared a file with you",
-          body: "Someone has shared a file with you. Click the link to view the file.",
-          html: `<p>Someone has shared a file with you. Click the link to view the file.</p>
-          <a href="${link}">View File</a>`,
-          text: "Someone has shared a file with you. Click the link to view the file.",
+          body: "Someone has shared a file with you.",
+          html: `
+          <p>Someone has shared a file with you. Click the link to view the file:
+          <a href="${link}">${link}</a>
+          The link is: ${link}
+          </p>
+          `,
+          // text: "Someone has shared a file with you. Click the link to view the file.",
           campaign: "File Sharing",
         },
         {
