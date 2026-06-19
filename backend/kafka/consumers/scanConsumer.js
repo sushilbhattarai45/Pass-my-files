@@ -30,7 +30,7 @@ await consumer.run({
       );
     } catch (error) {
       console.log(error);
-      throw new Error("Failed to scan file");
+      throw new Error("Failed to scan file.");
     }
   },
 });
