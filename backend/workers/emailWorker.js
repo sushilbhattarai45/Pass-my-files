@@ -40,73 +40,7 @@ async function sendEmail(email, link, requestID) {
           to: email,
           subject: "Someone has shared a file with you",
           body: "Someone has shared a file with you.",
-          html: `
-          <div style="
-            font-family: Arial, sans-serif;
-            background-color: #0a0a0f;
-            padding: 24px;
-            border-radius: 12px;
-            color: #ffffff;
-            max-width: 600px;
-            margin: auto;
-            border: 1px solid rgba(255,255,255,0.1);
-          ">
-            <h2 style="
-              margin: 0 0 12px 0;
-              font-size: 20px;
-              color: #ffffff;
-            ">
-              📁 File Shared With You
-            </h2>
-        
-            <p style="
-              font-size: 14px;
-              color: rgba(255,255,255,0.75);
-              line-height: 1.6;
-            ">
-              Someone has shared a file with you using <b>PassMyFiles</b>.
-              Click the button below to view and download the file.
-            </p>
-        
-            <div style="margin: 24px 0;">
-              <a href="${link}" target="_blank" style="
-                display: inline-block;
-                padding: 12px 18px;
-                background: linear-gradient(90deg, #3B82F6, #8B5CF6);
-                color: white;
-                text-decoration: none;
-                border-radius: 8px;
-                font-size: 14px;
-                font-weight: bold;
-              ">
-                Open File
-              </a>
-            </div>
-        
-            <div style="
-              font-size: 12px;
-              color: rgba(255,255,255,0.5);
-              word-break: break-all;
-              margin-top: 10px;
-            ">
-              If the button doesn’t work, copy and paste this link:<br />
-              <a href="${link}" style="color:#3B82F6;">${link}</a>
-            </div>
-        
-            <hr style="
-              border: none;
-              border-top: 1px solid rgba(255,255,255,0.1);
-              margin: 20px 0;
-            "/>
-        
-            <p style="
-              font-size: 11px;
-              color: rgba(255,255,255,0.4);
-            ">
-              This email was sent via PassMyFiles secure file sharing system.
-            </p>
-          </div>
-        `,
+          html: "<table width='100%' cellspacing='0' cellpadding='0' style='background:#0a0a0f;padding:20px;'><tr><td align='center'><table width='600' cellspacing='0' cellpadding='0' style='background:#111827;border:1px solid rgba(255,255,255,0.1);padding:24px;font-family:Arial,sans-serif;color:#ffffff;'><tr><td style='font-size:20px;font-weight:bold;padding-bottom:12px;'>📁 File Shared With You</td></tr><tr><td style='font-size:14px;color:#cbd5e1;line-height:1.6;padding-bottom:20px;'>Someone has shared a file with you using <b>PassMyFiles</b>. Click below to view and download the file.</td></tr><tr><td align='center' style='padding:20px 0;'><a href='${link}' style='background:#3B82F6;color:#ffffff;padding:12px 20px;text-decoration:none;font-weight:bold;display:inline-block;'>Open File</a></td></tr><tr><td style='font-size:12px;color:#94a3b8;word-break:break-all;padding-top:10px;'>If the button doesn’t work, copy this link:<br/><a href='${link}' style='color:#3B82F6;'>${link}</a></td></tr><tr><td style='border-top:1px solid rgba(255,255,255,0.1);padding-top:15px;font-size:11px;color:#6b7280;'>This email was sent via PassMyFiles secure file sharing system.</td></tr></table></td></tr></table>",
           // text: "Someone has shared a file with you. Click the link to view the file.",
           campaign: "File Sharing",
         },
