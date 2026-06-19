@@ -47,6 +47,7 @@ jobs:
             source: ~/.nvm/nvm.sh
             cd Passmyfiles
             cd backend
-            docker build -t passmyfile-server . --no-cache
             docker-compose down
+
+            docker build -t passmyfile-server . --no-cache
             docker-compose up -d
