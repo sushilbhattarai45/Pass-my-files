@@ -172,7 +172,7 @@ export const uploadFile = async (req, res) => {
             return res.status(400).json({ error: "Invalid emails format" });
           }
         }
-        let link = `https://www.passmyfiles.com/files/share/${requestID}`;
+        let link = `https://www.passmyfiles.com/files/${requestID}`;
 
         if (emails.length > 0) {
           await emailQueue.add(
