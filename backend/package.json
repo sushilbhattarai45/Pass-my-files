@@ -8,8 +8,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon index.js",
     "dev": "nodemon index.js",
-    "scan": "node workers/fileScanningWorker.js",
-    "consumer": "node kafka/consumers/scanConsumer.js"
+    "scanWorker": "node workers/fileScanningWorker.js",
+    "scanConsumer": "node kafka/consumers/scanConsumer.js",
+    "emailWorker": "node workers/emailWorker.js",
+    "expiringWorker": "node workers/expiringWorker.js"
+
+
   },
   "author": "",
   "license": "ISC",

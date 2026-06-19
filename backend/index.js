@@ -2,7 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import fs from "fs";
-import { connectDb } from "./db/connectDb.js";
+// import { connectDb } from "./db/connectDb.js";
 import fileRoutes from "./routes/fileRoutes.js";
 import { connectRedis } from "./config/redisConfig.js";
 dotenv.config();
@@ -31,10 +31,14 @@ async function startServer() {
   try {
     // await connectDb();
 
-    await connectRedis();
     app.listen(6000, async () => {
-      console.log(`Server is running on port ${PORT}`);
+      console.log("Connecting to S3");
       const result = await s3.send(new ListBucketsCommand({}));
+
+      console.log(result);
+      console.log(`Server is running on port ${PORT}`);
+      await connectRedis();
+
       startExpiringWorker();
 
       producer.send({

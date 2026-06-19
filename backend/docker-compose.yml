@@ -22,13 +22,20 @@ services:
       KAFKA_ZOOKEEPER_CONNECT: file-zookeeper:2181
 
       KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9093
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://file-kafka:9093
 
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
       KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z localhost 9093 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   file-redis:
     image: redis:latest
@@ -40,3 +47,55 @@ services:
     container_name: file-clamav
     ports:
       - "3310:3310"
+
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z  localhost 3310 || exit 1"]
+      interval: 10s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  passmyfile-api:
+    image: passmyfile-server
+    container_name: passmyfile-api
+    ports:
+      - "6000:6000"
+    restart: unless-stopped
+    depends_on:
+      file-zookeeper:
+        condition: service_started
+      file-kafka:
+        condition: service_healthy
+      file-redis:
+        condition: service_started
+      file-clamav:
+        condition: service_healthy
+    command: npm start
+
+  passmyfile-email-worker:
+    image: passmyfile-server
+    container_name: passmyfile-email-worker
+    restart: unless-stopped
+    command: node workers/emailWorker.js
+
+  passmyfile-expiring-worker:
+    image: passmyfile-server
+    container_name: passmyfile-expiring-worker
+    restart: unless-stopped
+    command: node workers/expiringWorker.js
+  passmyfile-scan-worker:
+    image: passmyfile-server
+    container_name: passmyfile-scan-worker
+    depends_on:
+      file-clamav:
+        condition: service_healthy
+    restart: unless-stopped
+    command: node workers/fileScanningWorker.js
+  passmyfile-scan-consumer:
+    image: passmyfile-server
+    depends_on:
+      file-kafka:
+        condition: service_healthy
+    container_name: passmyfile-scan-consumer
+    restart: unless-stopped
+    command: node kafka/consumers/scanConsumer.js

@@ -2,7 +2,7 @@ import ClamScan from "clamscan";
 
 export const clam = await new ClamScan().init({
   clamdscan: {
-    host: "localhost",
+    host: "file-clamav",
     port: 3310,
   },
 });

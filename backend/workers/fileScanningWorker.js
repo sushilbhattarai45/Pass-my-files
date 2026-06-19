@@ -12,8 +12,8 @@ import { s3 } from "../config/s3Client.js";
 dotenv.config();
 
 const bullRedis = new IORedis({
-  host: "localhost",
-  port: 6380,
+  host: "file-redis",
+  port: 6379,
   maxRetriesPerRequest: null,
 });
 new Worker(
