@@ -47,8 +47,7 @@ async function sendEmail(email, link, requestID) {
         },
         {
           headers: {
-            "x-api-key":
-              "e0fddddc1b7f7ecd2b0a746581899da257c92608ac6d28966e7ba0f149300c18",
+            "x-api-key": process.env.EMAIL_API_KEY,
             "Content-Type": "application/json",
           },
         },
