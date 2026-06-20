@@ -247,7 +247,7 @@ export default function FileDetails() {
                 <div className="preview-panel-info">
                   <h2 className="preview-panel-title">{activeFile.name}</h2>
                   <p className="preview-panel-meta">
-                    {activeFile.size} · {getFileTypeLabel(activeFile.name, activeFile.type)} · Stored in S3
+                    {activeFile.size} · {getFileTypeLabel(activeFile.name, activeFile.type)}
                   </p>
                 </div>
                 <button
@@ -306,10 +306,6 @@ export default function FileDetails() {
           <div className="meta-chip">
             <span className="meta-label">Files</span>
             <span className="meta-value">{share.totalFiles}</span>
-          </div>
-          <div className="meta-chip">
-            <span className="meta-label">Cost</span>
-            <span className="meta-value summary-value-free">Free</span>
           </div>
         </div>
       )}

@@ -15,13 +15,13 @@ import SharingNumberAccess from '../components/SharingNumberAccess';
 const FEATURES = [
   { icon: Zap, label: 'Instant delivery', desc: 'Files shared in seconds' },
   { icon: Activity, label: 'Live preview', desc: 'See every file in one place' },
-  { icon: KeyRound, label: 'Free to start', desc: 'No account, no cost' },
+  { icon: KeyRound, label: 'Optional password', desc: 'Add access protection' },
 ];
 
 const PIPELINE_STEPS = [
-  { label: 'Uploaded', status: 'pending' },
-  { label: 'Stored', status: 'retrying' },
-  { label: 'Shared', status: 'success' },
+  { label: 'Upload' },
+  { label: 'Store' },
+  { label: 'Share' },
 ];
 
 const HOW_IT_WORKS = [
@@ -45,26 +45,11 @@ const HOW_IT_WORKS = [
   },
 ];
 
-const mockFiles = [
-  { id: 'shr_8f2a…c91', name: 'contract.pdf', size: '1.2 MB', status: 'success' },
-  { id: 'shr_3b7e…a04', name: 'invoice.pdf', size: '840 KB', status: 'retrying' },
-  { id: 'shr_1c9d…f88', name: 'report.pdf', size: '2.1 MB', status: 'pending' },
+const VISUAL_STEPS = [
+  { title: 'Choose files', desc: 'PDFs, Word docs, and images only' },
+  { title: 'Upload securely', desc: 'Files are checked before sharing' },
+  { title: 'Copy the link', desc: 'Share the generated link or number' },
 ];
-
-function StatusBadge({ status, size }) {
-  const labels = {
-    success: 'ready',
-    retrying: 'stored',
-    pending: 'pending',
-  };
-  const label = labels[status] || status;
-
-  return (
-    <span className={`status-badge status-badge-${status}${size === 'sm' ? ' status-badge-sm' : ''}`}>
-      {label}
-    </span>
-  );
-}
 
 function SharePreview() {
   return (
@@ -72,22 +57,20 @@ function SharePreview() {
       <div className="visual-glow" aria-hidden />
       <div className="hero-visual">
         <div className="visual-header">
-          <span className="visual-label">Share preview</span>
-          <span className="visual-live">live</span>
+          <span className="visual-label">Sharing flow</span>
+          <span className="visual-live">ready after upload</span>
         </div>
 
         <div className="visual-body">
-          {mockFiles.map((file) => (
-            <div key={file.id} className="visual-file-row">
+          {VISUAL_STEPS.map((step) => (
+            <div key={step.title} className="visual-file-row visual-step-row">
               <div className="visual-file-icon">
                 <FileText />
               </div>
               <div className="visual-file-info">
-                <span className="visual-file-id">{file.id}</span>
-                <span className="visual-file-name">{file.name}</span>
-                <span className="visual-file-size">{file.size}</span>
+                <span className="visual-file-name">{step.title}</span>
+                <span className="visual-file-size">{step.desc}</span>
               </div>
-              <StatusBadge status={file.status} />
             </div>
           ))}
         </div>
@@ -97,7 +80,7 @@ function SharePreview() {
             {PIPELINE_STEPS.map((step, i) => (
               <div key={step.label} className="visual-pipeline-step">
                 <div className="visual-pipeline-cell">
-                  <StatusBadge status={step.status} size="sm" />
+                  <span className="visual-pipeline-dot" />
                   <span className="visual-pipeline-label">{step.label}</span>
                 </div>
                 {i < PIPELINE_STEPS.length - 1 && (
@@ -114,27 +97,25 @@ function SharePreview() {
 
 export default function Home() {
   return (
-    <div className="landing" style={{
-      marginTop: '100px',
-    }}>
+    <div className="landing">
       <section className="landing-hero">
         <div className="hero-copy">
           <p className="hero-eyebrow">
             <FileText className="hero-eyebrow-icon" />
             <span>
-              <span className="hero-eyebrow-accent">Simple</span>Share · Free File Sharing Platform
+              <span className="hero-eyebrow-accent">Simple</span>Share · File Sharing Platform
             </span>
           </p>
 
           <h1 className="hero-title">
-            Instant, <span className="hero-title-accent">free</span>
+            Simple, <span className="hero-title-accent">fast</span>
             <br />
             <span className="hero-title-muted">file sharing.</span>
           </h1>
 
           <p className="hero-lead">
             Upload files, get a sharing number, and let anyone access them.
-            Stored in S3. Expires in 7 days by default — up to 30 days.
+            Shares expire in 7 days by default, with options up to 30 days.
           </p>
 
           <div className="hero-ctas">

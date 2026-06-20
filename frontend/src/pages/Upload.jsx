@@ -32,7 +32,7 @@ function mergeFiles(existing, incoming) {
   return Array.from(map.values());
 }
 
-const PERKS = ['Instant link', 'Encrypted', '7-day default', 'Up to 30 days'];
+const PERKS = ['PDF, DOC, images', 'No videos', '5 MB per file', 'Up to 10 files'];
 const TURNSTILE_SITE_KEY = import.meta.env.VITE_TURNSTILE_SITE_KEY;
 
 export default function Upload() {
@@ -180,7 +180,7 @@ export default function Upload() {
                       ? 'Sending your files to the server'
                       : files.length > 0
                         ? `${files.length} of ${MAX_FILES} selected · Add more or upload`
-                        : 'Free · No account · Link ready in seconds'}
+                        : 'No account needed · Link ready after upload'}
                   </p>
                 </div>
                 <div className="upload-hero-badge glass-card">
@@ -336,7 +336,7 @@ export default function Upload() {
                       <div>
                         <div className="preview-file-name">{file.name}</div>
                         <div className="preview-file-size">
-                          {formatFileSize(file.size)} · Stored in S3
+                          {formatFileSize(file.size)} · Uploaded
                         </div>
                       </div>
                     </div>

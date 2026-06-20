@@ -34,6 +34,8 @@ async function sendEmail(email, link, requestID) {
     if (user) {
       console.log("User has been already send for this request");
     } else {
+      //template html  outlook compatible
+
       const { data } = await axios.post(
         "https://api.ehulak.tech/email/processEmail",
         {

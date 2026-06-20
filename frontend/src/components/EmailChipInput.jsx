@@ -1,5 +1,26 @@
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { isValidEmail, normalizeEmail, MAX_EMAILS } from '../utils/shareSettings';
+
+const SAVED_EMAILS_KEY = 'file-share:saved-emails';
+const MAX_SAVED_EMAILS = 10;
+
+function loadSavedEmails() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(SAVED_EMAILS_KEY) || '[]');
+    if (!Array.isArray(saved)) return [];
+    return saved.map(normalizeEmail).filter(isValidEmail).slice(0, MAX_SAVED_EMAILS);
+  } catch {
+    return [];
+  }
+}
+
+function persistSavedEmails(emails) {
+  try {
+    localStorage.setItem(SAVED_EMAILS_KEY, JSON.stringify(emails.slice(0, MAX_SAVED_EMAILS)));
+  } catch {
+    // localStorage can be unavailable in private browsing or strict privacy modes.
+  }
+}
 
 function CloseIcon() {
   return (
@@ -17,7 +38,39 @@ function CloseIcon() {
 export default function EmailChipInput({ emails, onEmailsChange, disabled = false, id, maxEmails = MAX_EMAILS }) {
   const [draft, setDraft] = useState('');
   const [error, setError] = useState('');
+  const [savedEmails, setSavedEmails] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
   const atLimit = emails.length >= maxEmails;
+
+  const suggestions = useMemo(() => {
+    const search = normalizeEmail(draft);
+    return savedEmails
+      .filter((email) => !emails.includes(email))
+      .filter((email) => !search || email.includes(search))
+      .slice(0, 5);
+  }, [draft, emails, savedEmails]);
+
+  useEffect(() => {
+    setSavedEmails(loadSavedEmails());
+  }, []);
+
+  function rememberEmail(email) {
+    const next = [email, ...savedEmails.filter((saved) => saved !== email)];
+    setSavedEmails(next);
+    persistSavedEmails(next);
+  }
+
+  function rememberEmails(nextEmails) {
+    const remembered = nextEmails.filter((email) => !emails.includes(email));
+    if (remembered.length === 0) return;
+
+    const next = [
+      ...remembered,
+      ...savedEmails.filter((saved) => !remembered.includes(saved)),
+    ];
+    setSavedEmails(next);
+    persistSavedEmails(next);
+  }
 
   function addEmail(raw) {
     const email = normalizeEmail(raw);
@@ -39,6 +92,7 @@ export default function EmailChipInput({ emails, onEmailsChange, disabled = fals
     }
 
     onEmailsChange([...emails, email]);
+    rememberEmail(email);
     setDraft('');
     setError('');
     return true;
@@ -65,6 +119,7 @@ export default function EmailChipInput({ emails, onEmailsChange, disabled = fals
     }
 
     onEmailsChange(next);
+    rememberEmails(next);
     setDraft('');
     if (skippedLimit) {
       setError(`You can add up to ${maxEmails} email addresses`);
@@ -103,26 +158,52 @@ export default function EmailChipInput({ emails, onEmailsChange, disabled = fals
 
   function handleBlur() {
     if (draft.trim()) addEmail(draft);
+    setShowSuggestions(false);
+  }
+
+  function handleSuggestionClick(email) {
+    addEmail(email);
+    setShowSuggestions(false);
   }
 
   return (
     <div className="email-chip-input">
-      <input
-        id={id}
-        type="email"
-        className={`settings-input email-chip-field${error ? ' email-chip-field-error' : ''}`}
-        placeholder={emails.length ? 'Add another email' : 'email@example.com'}
-        value={draft}
-        onChange={(e) => {
-          setDraft(e.target.value);
-          if (error) setError('');
-        }}
-        onKeyDown={handleKeyDown}
-        onPaste={handlePaste}
-        onBlur={handleBlur}
-        disabled={disabled || atLimit}
-        autoComplete="off"
-      />
+      <div className="email-chip-field-wrap">
+        <input
+          id={id}
+          type="email"
+          className={`settings-input email-chip-field${error ? ' email-chip-field-error' : ''}`}
+          placeholder={emails.length ? 'Add another email' : 'email@example.com'}
+          value={draft}
+          onChange={(e) => {
+            setDraft(e.target.value);
+            setShowSuggestions(true);
+            if (error) setError('');
+          }}
+          onFocus={() => setShowSuggestions(true)}
+          onKeyDown={handleKeyDown}
+          onPaste={handlePaste}
+          onBlur={handleBlur}
+          disabled={disabled || atLimit}
+          autoComplete="off"
+        />
+
+        {showSuggestions && !disabled && !atLimit && suggestions.length > 0 && (
+          <div className="email-suggestions" role="listbox" aria-label="Saved email suggestions">
+            {suggestions.map((email) => (
+              <button
+                key={email}
+                type="button"
+                className="email-suggestion"
+                onMouseDown={(e) => e.preventDefault()}
+                onClick={() => handleSuggestionClick(email)}
+              >
+                {email}
+              </button>
+            ))}
+          </div>
+        )}
+      </div>
 
       {emails.length > 0 && (
         <ul className="email-chip-list">

@@ -1,13 +1,8 @@
 const TRUST_ITEMS = [
-  { title: 'S3 Storage', desc: 'Built on reliable cloud infrastructure' },
-  { title: 'Encrypted transfers', desc: 'Secure in transit and at rest' },
-  { title: 'Always free', desc: 'No limits, no credit card' },
+  { title: 'Cloud storage', desc: 'Files are saved after upload' },
+  { title: 'Protected access', desc: 'Optional password protection' },
+  { title: 'No account required', desc: 'Create a share without signing in' },
   { title: '7-day default', desc: 'Extend up to 30 days' },
-];
-
-const LIVE_STATS = [
-  { label: 'Files shared today', value: '847' },
-  { label: 'Active links', value: '3.2k' },
 ];
 
 export default function TrustPanel() {
@@ -15,16 +10,7 @@ export default function TrustPanel() {
     <aside className="trust-panel">
       <div className="trust-panel-header">
         <span className="pulse-dot" />
-        <span>At a glance</span>
-      </div>
-
-      <div className="trust-stats glass-card">
-        {LIVE_STATS.map((stat) => (
-          <div key={stat.label} className="trust-stat">
-            <span className="trust-stat-value">{stat.value}</span>
-            <span className="trust-stat-label">{stat.label}</span>
-          </div>
-        ))}
+        <span>Share settings</span>
       </div>
 
       <div className="trust-list">
@@ -39,7 +25,7 @@ export default function TrustPanel() {
         ))}
       </div>
 
-      <p className="trust-footnote">Stored in S3</p>
+      <p className="trust-footnote">Links expire automatically</p>
     </aside>
   );
 }
